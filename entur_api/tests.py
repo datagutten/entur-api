@@ -13,6 +13,7 @@ class EnturApiTests(TestCase):
 
     def test_filter(self):
         entur = JourneyPlannerUtils('datagutten-tests')
-        departures = entur.filter_departures('NSR:StopPlace:58381', quays=['NSR:Quay:8027'])
+        departures = entur.filter_departures('NSR:StopPlace:58381',
+                                             quays=['NSR:Quay:8027'])
         self.assertEqual('NSR:Quay:8027', departures[0]['quay']['id'])
         self.assertEqual('1', departures[0]['quay']['publicCode'])

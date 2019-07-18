@@ -10,18 +10,23 @@ class EnturApi:
         self.client = client
 
     # https://gist.github.com/gbaman/b3137e18c739e0cf98539bf4ec4366ad
-    # A simple function to use requests.post to make the API call. Note the json= section.
+    # A simple function to use requests.post to make the API call.
+    # Note the json= section.
     def run_query(self, query):
         headers = {'ET-Client-Name': self.client}
-        request = requests.post('https://api.entur.io/journey-planner/v2/graphql', json={'query': query},
-                                headers=headers)
+        request = requests.post(
+            'https://api.entur.io/journey-planner/v2/graphql',
+            json={'query': query},
+            headers=headers)
         if request.status_code == 200:
             json = request.json()
             if 'errors' in json:
-                raise Exception("Entur returned error: %s" % json['errors'][0]['message'])
+                raise Exception('Entur returned error: %s' %
+                                json['errors'][0]['message'])
             return request.json()
         else:
-            raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
+            raise Exception('Query failed to run by returning code of {}. {}'.
+                            format(request.status_code, query))
 
     def get(self, url, json=True):
         headers = {'ET-Client-Name': self.client}
@@ -32,7 +37,8 @@ class EnturApi:
             else:
                 return request.text
         else:
-            raise Exception('Query failed to run by returning code of %s' % request.status_code)
+            raise Exception('Query failed to run by returning code of %s' %
+                            request.status_code)
 
     def rest_query(self, data_type='vm', operator='RUT', line_ref=None):
         url = 'http://api.entur.org/anshar/1.0/rest/%s?' % data_type
@@ -49,15 +55,18 @@ class EnturApi:
         result = self.get(url)
         return result['features']
 
-    def stop_departures(self, stop_id, start_time='', departures=10, time_range=72100):
+    def stop_departures(self, stop_id, start_time='',
+                        departures=10, time_range=72100):
         if start_time:
             start_time = datetime.now().strftime('%Y-%m-%dT') + start_time
-            start_time = '(startTime:"%s" timeRange: %d, numberOfDepartures: %d)' % (start_time, time_range, departures)
+            start_time = \
+                '(startTime:"%s" timeRange: %d, numberOfDepartures: %d)' % \
+                (start_time, time_range, departures)
         query = '''{
           stopPlace(id: "%s") {
             id
             name
-            estimatedCalls%s {     
+            estimatedCalls%s {
               aimedArrivalTime
               aimedDepartureTime
               expectedArrivalTime
