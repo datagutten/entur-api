@@ -4,7 +4,7 @@ from entur_api.journey_planner import EnturApi
 class JourneyPlannerUtils(EnturApi):
 
     def filter_departures(self, stop=None, departures=None,
-                          quays=None, limit=20):
+                          quays=None, limit=None):
         if stop is not None:
             departures = self.stop_departures_app(stop)
         elif departures is None:
@@ -22,6 +22,6 @@ class JourneyPlannerUtils(EnturApi):
                 continue
             departures_filtered.append(departure)
             counter += 1
-            if counter > limit:
+            if limit and counter > limit:
                 break
         return departures_filtered
