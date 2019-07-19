@@ -99,11 +99,11 @@ class EnturApi:
         # print(query)
         return self.run_query(query)
 
-    def stop_departures_app(self, stop_id):
+    def stop_departures_app(self, stop_id, limit=100):
         query = '''query GetLinesFromStopPlaceProps {
         stopPlace(id:"%s") {
             estimatedCalls(
-                numberOfDepartures: 100,
+                numberOfDepartures: %d,
                 omitNonBoarding: true,
             ) {
                 quay {
@@ -127,7 +127,7 @@ class EnturApi:
         publicCode
         transportMode
         transportSubmode
-    }''' % stop_id
+    }''' % (stop_id, limit)
         return self.run_query(query)
 
     def stop_info(self, stop_id):
