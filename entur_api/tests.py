@@ -39,3 +39,9 @@ class EnturApiTests(TestCase):
         self.assertEqual('Majorstuen', stop_info['data']['stopPlace']['name'])
         self.assertEqual('i Valkyriegata', stop_info['data']['stopPlace']['description'])
         self.assertEqual('Majorstuen', stop_info['data']['stopPlace']['quays'][0]['name'])
+
+    def test_quay_description(self):
+        entur = JourneyPlannerUtils('datagutten-tests')
+        departures = entur.filter_departures('NSR:StopPlace:58381',
+                                             quays=['NSR:Quay:8027'])
+        self.assertEqual('Retning sentrum', departures[0]['quay']['description'])

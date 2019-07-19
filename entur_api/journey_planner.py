@@ -109,6 +109,7 @@ class EnturApi:
                 quay {
                     id
                     name
+                    description
                     publicCode
                 }
                 destinationDisplay { frontText }
