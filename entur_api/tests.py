@@ -9,7 +9,7 @@ class EnturApiTests(TestCase):
         entur = EnturApi('datagutten-tests')
         departures = entur.stop_departures_app('NSR:StopPlace:58381')
         self.assertIsNotNone(departures)
-        self.assertEqual('Majorstuen', departures['data']['stopPlace']['name'])
+        self.assertIn('estimatedCalls', departures['data']['stopPlace'])
 
     def test_filter(self):
         entur = JourneyPlannerUtils('datagutten-tests')
@@ -32,3 +32,10 @@ class EnturApiTests(TestCase):
                                              quays=['NSR:Quay:8027', 'NSR:Quay:8028'], limit=None)
 
         self.assertGreater(len(departures), 5)
+
+    def test_stop_info(self):
+        entur = EnturApi('datagutten-tests')
+        stop_info = entur.stop_info('NSR:StopPlace:4483')
+        self.assertEqual('Majorstuen', stop_info['data']['stopPlace']['name'])
+        self.assertEqual('i Valkyriegata', stop_info['data']['stopPlace']['description'])
+        self.assertEqual('Majorstuen', stop_info['data']['stopPlace']['quays'][0]['name'])
