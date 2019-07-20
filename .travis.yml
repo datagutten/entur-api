@@ -11,7 +11,7 @@ install:
   - python setup.py install
 # command to run tests
 script:
-  - python -m unittest entur_api.tests.EnturApiTests
+  - python -m unittest
 deploy:
   provider: pypi
   user: datagutten
