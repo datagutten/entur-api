@@ -9,6 +9,8 @@ class Activity:
 
     def __init__(self, activity):
         self.activity = activity
+        if not type(activity) == ElementTree.Element:
+            raise ValueError('Invalid argument type: %s, should be xml.etree.ElementTree.Element' % type(activity))
 
     def find(self, query, text=True):
         result = self.activity.find(query, self.namespaces)
