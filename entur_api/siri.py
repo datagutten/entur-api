@@ -95,8 +95,12 @@ class Siri(EnturCommon):
         self.tree = ElementTree.fromstring(xml_string)
 
     def vehicle_activities(self):
-        activities = self.tree.findall(
+        activities_xml = self.tree.findall(
             './/siri:VehicleMonitoringDelivery/siri:VehicleActivity', self.namespaces)
+        activities = []
+        for activity_xml in activities_xml:
+            activities.append(Activity(activity_xml))
+
         return activities
 
     def journey(self, journey=None, departure=None, arrival=None, quay=None):
