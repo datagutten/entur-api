@@ -1,3 +1,8 @@
+from xml.etree import ElementTree
+
+from .enturcommon import EnturCommon
+
+
 class Activity:
     activity = None
     namespaces = {'siri': 'http://www.siri.org.uk/siri'}
@@ -70,20 +75,17 @@ class Activity:
         return call
 
 
-class Siri:
+class Siri(EnturCommon):
 
-    # import entur_api
-    from entur_api.journey_planner import EnturApi
-
-    entur = EnturApi('datagutten-entur-dev')
     namespaces = {'siri': 'http://www.siri.org.uk/siri'}
     tree = None
 
-    def __init__(self, line=None, file=None):
-        from xml.etree import ElementTree
+    def __init__(self, client, line=None, file=None):
+        super().__init__(client)
+
         # print(line)
         if line:
-            xml_string = self.entur.rest_query(line_ref=line)
+            xml_string = self.rest_query(line_ref=line)
         elif file:
             f = open(file, 'r')
             xml_string = f.read()

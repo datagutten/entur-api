@@ -2,12 +2,12 @@ from datetime import datetime
 
 import requests
 
+from .enturcommon import EnturCommon
 
-class EnturApi:
-    client = None
 
+class EnturApi(EnturCommon):
     def __init__(self, client):
-        self.client = client
+        super().__init__(client)
 
     # https://gist.github.com/gbaman/b3137e18c739e0cf98539bf4ec4366ad
     # A simple function to use requests.post to make the API call.
@@ -27,33 +27,6 @@ class EnturApi:
         else:
             raise Exception('Query failed to run by returning code of {}. {}'.
                             format(request.status_code, query))
-
-    def get(self, url, json=True):
-        headers = {'ET-Client-Name': self.client}
-        request = requests.get(url, headers=headers)
-        if request.status_code == 200:
-            if json:
-                return request.json()
-            else:
-                return request.text
-        else:
-            raise Exception('Query failed to run by returning code of %s' %
-                            request.status_code)
-
-    def rest_query(self, data_type='vm', operator='RUT', line_ref=None):
-        url = 'http://api.entur.org/anshar/1.0/rest/%s?' % data_type
-        if operator:
-            url += 'datasetId=%s&' % operator
-        if line_ref:
-            url += 'LineRef=%s&' % line_ref
-        # print(url)
-        return self.get(url, json=False)
-
-    def geocode_reverse(self, lat, lon):
-        url = 'https://api.entur.org/api/geocoder/1.1/reverse?point.lat=%s&point.lon=%s&lang=en&size=10&layers=venue' \
-              % (lat, lon)
-        result = self.get(url)
-        return result['features']
 
     def stop_departures(self, stop_id, start_time='',
                         departures=10, time_range=72100):
