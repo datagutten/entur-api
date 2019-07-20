@@ -12,15 +12,26 @@ class Activity:
         if not type(activity) == ElementTree.Element:
             raise ValueError('Invalid argument type: %s, should be xml.etree.ElementTree.Element' % type(activity))
 
-    def find(self, query, text=True):
-        result = self.activity.find(query, self.namespaces)
+    def find(self, query, text=True, topic=None):
+        if not topic:
+            topic = self.activity
+        result = topic.find(query, self.namespaces)
+
+        if result is None:
+            return None
         if text:
             return result.text
         else:
             return result
 
+    def progress(self):
+        return self.find('.//siri:ProgressBetweenStops/siri:Percentage')
+
     def line_ref(self):
         return self.find('.//siri:LineRef')
+
+    def direction(self):
+        return self.find('.//siri:DirectionRef')
 
     def service_journey(self):
         return self.find('.//siri:DatedVehicleJourneyRef')
@@ -46,11 +57,24 @@ class Activity:
     def destination(self):
         return self.find('.//siri:DestinationName')
 
+    def monitored(self):
+        text = self.find('.//siri:Monitored')
+        if text == 'true':
+            return True
+        elif text == 'false':
+            return False
+        else:
+            return None
+
     def location(self):
         location = self.find('.//siri:VehicleLocation', text=False)
-        lat = location.find('siri:Latitude', self.namespaces)
-        lon = location.find('siri:Longitude', self.namespaces)
+        lat = self.find('siri:Latitude', topic=location)
+        lon = self.find('siri:Longitude', topic=location)
         return [lat, lon]
+
+    def location_link(self):
+        [lat, lon] = self.location()
+        return 'http://www.google.com/maps/place/%s,%s' % (lat, lon)
 
     def delay(self):
         return self.find('.//siri:Delay')
@@ -64,6 +88,27 @@ class Activity:
 
     def vehicle(self):
         return self.find('.//siri:VehicleRef')
+
+    def visit(self, call):
+        info = {'StopPointRef': self.find('siri:StopPointRef', topic=call),
+                'VisitNumber': self.find('siri:VisitNumber', topic=call),
+                'StopPointName': self.find('siri:StopPointName', topic=call),
+                'DestinationDisplay': self.find('siri:DestinationDisplay', topic=call),
+                'VehicleAtStop': self.find('siri:VehicleAtStop', topic=call),
+                }
+        return info
+
+    def previous_call(self):
+        call = self.find('.//siri:PreviousCalls/siri:PreviousCall', text=False)
+        return self.visit(call)
+
+    def monitored_call(self):
+        call = self.find('.//siri:MonitoredCall', text=False)
+        return self.visit(call)
+
+    def onward_call(self):
+        call = self.find('.//siri:OnwardCalls/siri:OnwardCall', text=False)
+        return self.visit(call)
 
     def stop(self, category):
         if category == 'previous':

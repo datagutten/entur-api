@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from entur_api.siri import Activity, Siri
+from entur_api.siri import Siri
 
 
 class SiriTest(TestCase):
@@ -9,5 +9,14 @@ class SiriTest(TestCase):
         activities = siri.vehicle_activities()
         self.assertIsNotNone(activities)
         for activity in activities:
-            act = Activity(activity)
-            self.assertEqual('Unibuss', act.operator())
+            self.assertEqual('Unibuss', activity.operator())
+            self.assertEqual('RUT:Line:83', activity.line_ref())
+            self.assertEqual('83', activity.line_name())
+
+    def test_location(self):
+        siri = Siri('datagutten-entur-api-test', line='RUT:Line:83')
+        activities = siri.vehicle_activities()
+        for act in activities:
+            self.assertIsNotNone(act.previous_call()['StopPointRef'])
+            # self.assertIsNotNone(act.onward_call()['StopPointRef'])
+            self.assertIsNotNone(act.monitored_call()['StopPointRef'])
