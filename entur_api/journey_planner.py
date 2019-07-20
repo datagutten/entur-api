@@ -46,7 +46,7 @@ class EnturApi:
             url += 'datasetId=%s&' % operator
         if line_ref:
             url += 'LineRef=%s&' % line_ref
-        print(url)
+        # print(url)
         return self.get(url, json=False)
 
     def geocode_reverse(self, lat, lon):

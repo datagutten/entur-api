@@ -81,7 +81,7 @@ class Siri:
 
     def __init__(self, line=None, file=None):
         from xml.etree import ElementTree
-        print(line)
+        # print(line)
         if line:
             xml_string = self.entur.rest_query(line_ref=line)
         elif file:
