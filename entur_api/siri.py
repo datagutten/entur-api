@@ -136,6 +136,7 @@ class Siri(EnturCommon):
         elif file:
             f = open(file, 'r')
             xml_string = f.read()
+            f.close()
         else:
             raise Exception('file or line must be specified')
 
