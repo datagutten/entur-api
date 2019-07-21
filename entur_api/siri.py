@@ -10,9 +10,11 @@ class Activity:
     def __init__(self, activity):
         self.activity = activity
         if not type(activity) == ElementTree.Element:
-            raise ValueError('Invalid argument type: %s, should be xml.etree.ElementTree.Element' % type(activity))
+            raise ValueError('Invalid argument type: %s, should be '
+                             'xml.etree.ElementTree.Element' % type(activity))
         if not activity.tag == '{http://www.siri.org.uk/siri}VehicleActivity':
-            raise ValueError('Tag should be VehicleActivity, but is %s' % activity.tag)
+            raise ValueError('Tag should be VehicleActivity, but is %s' %
+                             activity.tag)
 
     def find(self, query, text=True, topic=None):
         if not topic:
@@ -95,7 +97,8 @@ class Activity:
         info = {'StopPointRef': self.find('siri:StopPointRef', topic=call),
                 'VisitNumber': self.find('siri:VisitNumber', topic=call),
                 'StopPointName': self.find('siri:StopPointName', topic=call),
-                'DestinationDisplay': self.find('siri:DestinationDisplay', topic=call),
+                'DestinationDisplay': self.find('siri:DestinationDisplay',
+                                                topic=call),
                 'VehicleAtStop': self.find('siri:VehicleAtStop', topic=call),
                 }
         return info
@@ -114,7 +117,8 @@ class Activity:
 
     def stop(self, category):
         if category == 'previous':
-            call = self.find('.//siri:PreviousCalls/siri:PreviousCall', text=False)
+            call = self.find('.//siri:PreviousCalls/siri:PreviousCall',
+                             text=False)
         elif category == 'nearest':
             call = self.find('.//siri:MonitoredCall', text=False)
         elif category == 'next':
@@ -153,21 +157,25 @@ class Siri(EnturCommon):
 
         return activities
 
-    def find_vehicle_activity(self, origin_aimed_departure_time=None, origin_quay=None, line=None, debug=False):
+    def find_vehicle_activity(self, origin_aimed_departure_time=None,
+                              origin_quay=None, line=None, debug=False):
         q = './/siri:VehicleMonitoringDelivery'
         act = self.tree.find(q, self.namespaces)
         if debug:
             print(origin_aimed_departure_time)
         if origin_aimed_departure_time:
-            act = act.find('.//siri:OriginAimedDepartureTime[.="%s"]/../..' % origin_aimed_departure_time, self.namespaces)
+            act = act.find('.//siri:OriginAimedDepartureTime[.="%s"]/../..' %
+                           origin_aimed_departure_time, self.namespaces)
             if debug:
                 print('origin_aimed_departure_time', origin_aimed_departure_time, act)
         if origin_quay:
-            act = act.find('.//siri:OriginRef[.="%s"]/../..' % origin_quay, self.namespaces)
+            act = act.find('.//siri:OriginRef[.="%s"]/../..' % origin_quay,
+                           self.namespaces)
             if debug:
                 print('origin_quay', origin_quay, act)
         if line:
-            act = act.find('.//siri:LineRef[.="%s"]/../..' % line, self.namespaces)
+            act = act.find('.//siri:LineRef[.="%s"]/../..' % line,
+                           self.namespaces)
             if debug:
                 print('line', line, act)
 
@@ -194,7 +202,7 @@ class Siri(EnturCommon):
             value = departure
         else:
             raise Exception('Missing argument')
-        print(q)
+
         try:
             act = self.tree.find(q, self.namespaces)
         except SyntaxError:
