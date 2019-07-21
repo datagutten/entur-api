@@ -11,6 +11,8 @@ class Activity:
         self.activity = activity
         if not type(activity) == ElementTree.Element:
             raise ValueError('Invalid argument type: %s, should be xml.etree.ElementTree.Element' % type(activity))
+        if not activity.tag == '{http://www.siri.org.uk/siri}VehicleActivity':
+            raise ValueError('Tag should be VehicleActivity, but is %s' % activity.tag)
 
     def find(self, query, text=True, topic=None):
         if not topic:
