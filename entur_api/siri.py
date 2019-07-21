@@ -159,7 +159,6 @@ class Siri(EnturCommon):
         if debug:
             print(origin_aimed_departure_time)
         if origin_aimed_departure_time:
-            print('.//siri:OriginAimedDepartureTime[.="%s"]/../..' % origin_aimed_departure_time)
             act = act.find('.//siri:OriginAimedDepartureTime[.="%s"]/../..' % origin_aimed_departure_time, self.namespaces)
             if debug:
                 print('origin_aimed_departure_time', origin_aimed_departure_time, act)

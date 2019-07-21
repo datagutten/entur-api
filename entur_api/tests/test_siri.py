@@ -14,11 +14,9 @@ class SiriTest(TestCase):
             self.assertEqual('83', activity.line_name())
 
     def test_location(self):
-        siri = Siri('datagutten-entur-api-test', line='RUT:Line:83')
+        siri = Siri('datagutten-entur-api-test', file='test_data/vm.xml')
         activities = siri.vehicle_activities()
         for act in activities:
-            pass
-            # TODO: Find more stable tests
-            # self.assertIsNotNone(act.previous_call()['StopPointRef'])
-            # self.assertIsNotNone(act.onward_call()['StopPointRef'])
-            # self.assertIsNotNone(act.monitored_call()['StopPointRef'])
+            self.assertIsNotNone(act.previous_call()['StopPointRef'])
+            self.assertIsNotNone(act.onward_call()['StopPointRef'])
+            self.assertIsNotNone(act.monitored_call()['StopPointRef'])
