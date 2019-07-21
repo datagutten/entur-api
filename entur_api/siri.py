@@ -150,6 +150,28 @@ class Siri(EnturCommon):
 
         return activities
 
+    def find_vehicle_activity(self, origin_aimed_departure_time=None, origin_quay=None, line=None, debug=False):
+        q = './/siri:VehicleMonitoringDelivery'
+        act = self.tree.find(q, self.namespaces)
+        if debug:
+            print(origin_aimed_departure_time)
+        if origin_aimed_departure_time:
+            print('.//siri:OriginAimedDepartureTime[.="%s"]/../..' % origin_aimed_departure_time)
+            act = act.find('.//siri:OriginAimedDepartureTime[.="%s"]/../..' % origin_aimed_departure_time, self.namespaces)
+            if debug:
+                print('origin_aimed_departure_time', origin_aimed_departure_time, act)
+        if origin_quay:
+            act = act.find('.//siri:OriginRef[.="%s"]/../..' % origin_quay, self.namespaces)
+            if debug:
+                print('origin_quay', origin_quay, act)
+        if line:
+            act = act.find('.//siri:LineRef[.="%s"]/../..' % line, self.namespaces)
+            if debug:
+                print('line', line, act)
+
+        if act is not None:
+            return Activity(act)
+
     def journey(self, journey=None, departure=None, arrival=None, quay=None):
         if journey:
             q = './/siri:FramedVehicleJourneyRef/siri:DatedVehicleJourneyRef[.="%s"]' % journey
