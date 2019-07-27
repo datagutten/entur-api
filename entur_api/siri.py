@@ -53,13 +53,19 @@ class Activity:
         return self.find('.//siri:OriginRef')
 
     def origin(self):
-        return self.find('.//siri:Origin')
+        return self.find('.//siri:OriginName')
+
+    def origin_time(self):
+        return self.find('.//siri:OriginAimedDepartureTime')
 
     def destination_ref(self):
         return self.find('.//siri:DestinationRef')
 
     def destination(self):
         return self.find('.//siri:DestinationName')
+
+    def destination_time(self):
+        return self.find('.//siri:DestinationAimedArrivalTime')
 
     def monitored(self):
         text = self.find('.//siri:Monitored')
