@@ -139,7 +139,7 @@ class Siri(EnturCommon):
     namespaces = {'siri': 'http://www.siri.org.uk/siri'}
     tree = None
 
-    def __init__(self, client, line=None, file=None):
+    def __init__(self, client, line=None, file=None, operator='RUT'):
         super().__init__(client)
 
         # print(line)
@@ -149,6 +149,8 @@ class Siri(EnturCommon):
             f = open(file, 'r')
             xml_string = f.read()
             f.close()
+        elif operator:
+            xml_string = self.rest_query(operator=operator)
         else:
             raise Exception('file or line must be specified')
 
