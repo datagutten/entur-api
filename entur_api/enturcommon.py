@@ -18,7 +18,7 @@ class EnturCommon:
                             request.status_code)
 
     def rest_query(self, data_type='vm', operator='RUT', line_ref=None):
-        url = 'http://api.entur.org/anshar/1.0/rest/%s?' % data_type
+        url = 'https://api.entur.io/realtime/v1/rest/%s?' % data_type
         if operator:
             url += 'datasetId=%s&' % operator
         if line_ref:
