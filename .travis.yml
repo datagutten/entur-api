@@ -9,7 +9,9 @@ install:
   - python setup.py install
 # command to run tests
 script:
-  - python -m unittest
+  - coverage run -m unittest
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: pypi
   user: datagutten
