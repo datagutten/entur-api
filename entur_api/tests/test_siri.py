@@ -14,6 +14,8 @@ class SiriTest(TestCase):
         siri = Siri('datagutten-entur-api-test', line='RUT:Line:83')
         activities = siri.vehicle_activities()
         self.assertIsNotNone(activities)
+        self.assertNotEqual(activities, [], 'List should not be empty')
+
         for activity in activities:
             self.assertEqual('Unibuss', activity.operator())
             self.assertEqual('RUT:Line:83', activity.line_ref())
