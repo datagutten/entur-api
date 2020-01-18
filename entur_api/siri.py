@@ -176,26 +176,58 @@ class Siri(EnturCommon):
                               origin_quay=None, line=None, debug=False):
         q = './/siri:VehicleMonitoringDelivery'
         act = self.tree.find(q, self.namespaces)
+        acts = []
         if debug:
             print(origin_aimed_departure_time)
         if origin_aimed_departure_time:
-            act = act.find('.//siri:OriginAimedDepartureTime[.="%s"]/../..' %
-                           origin_aimed_departure_time, self.namespaces)
+            acts = act.findall('.//siri:OriginAimedDepartureTime[.="%s"]/../..' %
+                               origin_aimed_departure_time, self.namespaces)
+            if not acts:
+                return
+
             if debug:
-                print('origin_aimed_departure_time', origin_aimed_departure_time, act)
+                print('%d OriginAimedDepartureTime found' % len(acts))
+                print('origin_aimed_departure_time', origin_aimed_departure_time, acts[0])
+                activity = Activity(acts[0])
+                print('Line', activity.line_ref())
+
         if origin_quay:
-            act = act.find('.//siri:OriginRef[.="%s"]/../..' % origin_quay,
-                           self.namespaces)
+            acts_tmp = []
+            if not acts:
+                acts = act.findall('.//siri:OriginRef[.="%s"]/../..' % origin_quay,
+                                   self.namespaces)
+                if not acts:
+                    return
+            else:
+                for act in acts:
+                    activity = Activity(act)
+                    if activity.origin_ref() == origin_quay:
+                        acts_tmp.append(act)
+                acts = acts_tmp
             if debug:
                 print('origin_quay', origin_quay, act)
         if line:
-            act = act.find('.//siri:LineRef[.="%s"]/../..' % line,
-                           self.namespaces)
-            if debug:
-                print('line', line, act)
+            acts_tmp = []
+            if not acts:
+                acts = act.findall('.//siri:LineRef[.="%s"]/../..' % line,
+                                   self.namespaces)
+                if not acts:
+                    return
+            else:
+                for act in acts:
+                    activity = Activity(act)
+                    if activity.line_ref() == line:
+                        acts_tmp.append(act)
 
-        if act is not None:
-            return Activity(act)
+                if debug:
+                    print('line', line, act)
+                acts = acts_tmp
+
+        if acts is not None:
+            if len(acts) == 1:
+                return Activity(acts[0])
+            else:
+                raise Exception('Multiple activities found, add more filters')
 
     def journey(self, journey=None, departure=None, arrival=None, quay=None):
         if journey:
