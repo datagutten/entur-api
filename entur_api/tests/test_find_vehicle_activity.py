@@ -36,3 +36,35 @@ class TestFindVehicleActivity(TestCase):
             origin_quay='NSR:Quay:6263')
         self.assertEqual('Unibuss:8302:00810', act.block_ref())
         self.assertEqual('101121', act.vehicle())
+
+    def test_multiple(self):
+        self.siri = Siri('datagutten-tests', file=os.path.join(self.file_path, 'vm-2020-01-18.xml'))
+        act = self.siri.find_vehicle_activity(
+            origin_aimed_departure_time='2020-01-18T10:10:00+01:00',
+            line='RUT:Line:83',
+            origin_quay='NSR:Quay:7216',
+        )
+
+        self.assertEqual('Unibuss:8101:2040', act.block_ref())
+        self.assertEqual('103089', act.vehicle())
+
+    def test_multiple_2(self):
+        self.siri = Siri('datagutten-tests', file=os.path.join(self.file_path, 'vm-2020-01-18.xml'))
+        act = self.siri.find_vehicle_activity(
+            origin_aimed_departure_time='2020-01-18T09:42:00+01:00',
+            line='RUT:Line:160',
+            origin_quay='NSR:Quay:7724',
+        )
+
+        self.assertEqual('Norgesbuss:16006:2000', act.block_ref())
+        self.assertEqual('328929', act.vehicle())
+
+    def test_multiple_not_found(self):
+        self.siri = Siri('datagutten-tests', file=os.path.join(self.file_path, 'vm-2020-01-18.xml'))
+        act = self.siri.find_vehicle_activity(
+            origin_aimed_departure_time='2020-01-18T12:40:00+01:00',
+            line='RUT:Line:83',
+            origin_quay='NSR:Quay:7216',
+        )
+
+        self.assertIsNone(act)
