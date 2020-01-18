@@ -138,6 +138,7 @@ class Siri(EnturCommon):
 
     namespaces = {'siri': 'http://www.siri.org.uk/siri'}
     tree = None
+    line = None
 
     def __init__(self, client, line=None, file=None, operator='RUT'):
         super().__init__(client)
@@ -145,6 +146,7 @@ class Siri(EnturCommon):
         # print(line)
         if line:
             xml_string = self.rest_query(line_ref=line)
+            self.line = line
         elif file:
             f = open(file, 'r')
             xml_string = f.read()
@@ -157,8 +159,13 @@ class Siri(EnturCommon):
         self.tree = ElementTree.fromstring(xml_string)
 
     def vehicle_activities(self):
-        activities_xml = self.tree.findall(
-            './/siri:VehicleMonitoringDelivery/siri:VehicleActivity', self.namespaces)
+        if self.line:
+            activities_xml = self.tree.findall(
+                './/siri:VehicleMonitoringDelivery/siri:VehicleActivity/siri:MonitoredVehicleJourney/siri:LineRef[.="%s"]/../..' % self.line,
+                self.namespaces)
+        else:
+            activities_xml = self.tree.findall(
+                './/siri:VehicleMonitoringDelivery/siri:VehicleActivity', self.namespaces)
         activities = []
         for activity_xml in activities_xml:
             activities.append(Activity(activity_xml))
