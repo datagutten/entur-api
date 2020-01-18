@@ -16,6 +16,9 @@ class Activity:
             raise ValueError('Tag should be VehicleActivity, but is %s' %
                              activity.tag)
 
+    def __str__(self):
+        return '%s %s from %s at %s' % (self.line_name(), self.destination(), self.origin(), self.origin_time())
+
     def find(self, query, text=True, topic=None):
         if not topic:
             topic = self.activity
