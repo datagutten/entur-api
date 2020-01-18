@@ -1,3 +1,4 @@
+import os
 from time import time
 
 import requests
@@ -6,6 +7,7 @@ import requests
 class EnturCommon:
     cache = {}
     last_request = {}
+    cache_path = '/home/entur_cache'
 
     def __init__(self, client):
         self.client = client
@@ -31,10 +33,23 @@ class EnturCommon:
             self.last_request[url] = time()
             return response
 
-    def rest_query(self, data_type='vm', operator='RUT', line_ref=None):
+    def cache_file(self, data_type, operator):
+        return '%s/%s_%s.xml' % (self.cache_path, operator, data_type)
+
+    def rest_query(self, data_type='vm', operator='RUT', line_ref=None, force_get=False, file_cache=True):
+        local_file = self.cache_file(data_type, operator)
+        if os.path.exists(local_file) and not force_get and file_cache:
+            f = open(local_file, 'r')
+            xml = f.read()
+            f.close()
+            return xml
+
         url = 'https://api.entur.io/realtime/v1/rest/%s?' % data_type
         if operator:
             url += 'datasetId=%s&' % operator
         if line_ref:
             url += 'LineRef=%s&' % line_ref
-        return self.cached_get(url, json=False)
+        if not force_get:
+            return self.cached_get(url, json=False)
+        else:
+            return self.get(url, json=False)
