@@ -97,10 +97,7 @@ class Siri(EnturCommon):
             if len(acts) == 1:
                 return Activity(acts[0])
             else:
-                if debug:
-                    for activity in acts:
-                        print(Activity(act))
-                raise Exception('%d activities found, add more filters' % len(acts))
+                raise Exception('Multiple activities found, add more filters')
 
     def journey(self, journey=None, departure=None, arrival=None, quay=None):
         if journey:
