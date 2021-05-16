@@ -1,0 +1,43 @@
+query($stop_id: String!, $number:Int = 10) {
+    stopPlace(id: $stop_id) {
+        id
+        name
+        estimatedCalls(numberOfDepartures: $number) {
+            realtime
+            aimedArrivalTime
+            aimedDepartureTime
+            expectedArrivalTime
+            expectedDepartureTime
+            actualArrivalTime
+            actualDepartureTime
+            date
+            forBoarding
+            forAlighting
+            destinationDisplay {
+                frontText
+            }
+            quay {
+                id
+            }
+            serviceJourney {
+                id
+                replacementForServiceJourneyId
+                privateCode
+                publicCode
+                line {
+                    id
+                    name
+                    publicCode
+                    operator {
+                        id
+                    }
+                    presentation {
+                        textColour
+                        colour
+                    }
+                    transportMode
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from entur_api.journey_planner import EnturApi
-from entur_api.journey_planner_utils import JourneyPlannerUtils
+from entur_api import EnturJourneyPlanner as EnturApi, \
+    EnturJourneyPlannerUtils as JourneyPlannerUtils
 
 
 class EnturApiTests(TestCase):

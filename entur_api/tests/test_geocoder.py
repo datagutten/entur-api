@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from entur_api.geocoder import GeoCoder
+from entur_api import GeoCoder
 
 
 class GeoCodeTest(TestCase):

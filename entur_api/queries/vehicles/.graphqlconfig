@@ -1,0 +1,15 @@
+{
+  "name": "Entur journey planner",
+  "schemaPath": "schema_vehicles.graphql",
+  "extensions": {
+    "endpoints": {
+      "vehicles": {
+        "url": "https://api.entur.io/realtime/v1/vehicles/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+      }
+    }
+  }
+}

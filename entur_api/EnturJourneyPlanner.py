@@ -1,32 +1,22 @@
 from datetime import datetime
 
-import requests
-
-from .enturcommon import EnturCommon
+from entur_api import EnturGraphQL
 
 
-class EnturApi(EnturCommon):
+class EnturJourneyPlanner(EnturGraphQL):
+    endpoint = 'https://api.entur.io/journey-planner/v2/graphql'
+    endpoint_folder = 'journey-planner'
+
     def __init__(self, client):
         super().__init__(client)
 
-    # https://gist.github.com/gbaman/b3137e18c739e0cf98539bf4ec4366ad
-    # A simple function to use requests.post to make the API call.
-    # Note the json= section.
-    def run_query(self, query):
-        headers = {'ET-Client-Name': self.client}
-        request = requests.post(
-            'https://api.entur.io/journey-planner/v2/graphql',
-            json={'query': query},
-            headers=headers)
-        if request.status_code == 200:
-            json = request.json()
-            if 'errors' in json:
-                raise Exception('Entur returned error: %s' %
-                                json['errors'][0]['message'])
-            return request.json()
-        else:
-            raise Exception('Query failed to run by returning code of {}. {}'.
-                            format(request.status_code, query))
+    def stop_departures_file(self, stop_id, departures=10):
+        query = self.get_query('stop_departures')
+        result = self.run_query(query, {
+            'stop_id': stop_id,
+            'number': departures
+        })
+        return result['data']['stopPlace']
 
     def stop_departures(self, stop_id, start_time='',
                         departures=10, time_range=72100):
@@ -69,7 +59,6 @@ class EnturApi(EnturCommon):
             }
           }
         }''' % (stop_id, start_time)
-        # print(query)
         return self.run_query(query)
 
     def stop_departures_app(self, stop_id, limit=100):

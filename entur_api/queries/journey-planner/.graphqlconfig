@@ -1,0 +1,15 @@
+{
+  "name": "Entur journey planner",
+  "schemaPath": "schema_journey-planner.graphql",
+  "extensions": {
+    "endpoints": {
+      "journey-planner": {
+        "url": "https://api.entur.io/journey-planner/v2/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+      }
+    }
+  }
+}

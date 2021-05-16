@@ -1,7 +1,7 @@
-from entur_api.journey_planner import EnturApi
+from entur_api import EnturJourneyPlanner
 
 
-class JourneyPlannerUtils(EnturApi):
+class EnturJourneyPlannerUtils(EnturJourneyPlanner):
 
     def filter_departures(self, stop=None, departures=None,
                           quays=None, limit=None):

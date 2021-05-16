@@ -1,0 +1,24 @@
+query ($codespace:String, $line:String){
+    vehicles(codespaceId: $codespace, lineRef: $line) {
+        serviceJourney {
+            serviceJourneyId
+        }
+        line {
+            lineRef
+        }
+        lastUpdated
+        vehicleId
+        location {
+            latitude
+            longitude
+        }
+        monitored
+        operator {
+            operatorRef
+        }
+        delay
+        codespace {
+            codespaceId
+        }
+    }
+}

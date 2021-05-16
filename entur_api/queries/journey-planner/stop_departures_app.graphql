@@ -1,0 +1,29 @@
+query GetLinesFromStopPlaceProps($stop_id: String!, $number:Int = 10) {
+        stopPlace(id:$stop_id) {
+            estimatedCalls(
+                numberOfDepartures: $number,
+                omitNonBoarding: true,
+            ) {
+                quay {
+                    id
+                    name
+                    description
+                    publicCode
+                }
+                destinationDisplay { frontText }
+                serviceJourney { id journeyPattern { line { ...lineFields } } }
+                realtime
+                expectedDepartureTime
+                aimedDepartureTime
+            }
+        }
+    }
+
+    fragment lineFields on Line {
+        id
+        authority { id name }
+        name
+        publicCode
+        transportMode
+        transportSubmode
+    }
