@@ -42,6 +42,12 @@ class Siri(EnturCommon):
 
         return activities
 
+    def get_vehicle_activity(self, vehicle_id):
+        q = './/siri:VehicleMonitoringDelivery/siri:VehicleActivity/siri:MonitoredVehicleJourney[siri:VehicleRef="%s"]/..'
+        act = self.tree.find(q % vehicle_id, self.namespaces)
+        if act:
+            return Activity(act)
+
     def find_vehicle_activity(self, origin_aimed_departure_time=None,
                               origin_quay=None, line=None, debug=False):
         q = './/siri:VehicleMonitoringDelivery'
