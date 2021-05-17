@@ -5,7 +5,7 @@ from entur_api.enturcommon import EnturCommon
 
 class RequestTest(TestCase):
     def testCache(self):
-        url = 'https://api.entur.io/realtime/v1/rest/vm?datasetId=RUT&LineRef=RUT:Line:83&'
+        url = 'https://api.entur.io/realtime/v1/rest/vm?datasetId=RUT&' # &LineRef=RUT:Line:83&'
         entur = EnturCommon('datagutten-entur-api-test')
         self.assertEqual(entur.cache, {}, 'Cache should be empty')
         entur.rest_query(line_ref='RUT:Line:83', file_cache=False)  # Load data to cache
