@@ -47,8 +47,8 @@ class EnturCommon:
         url = 'https://api.entur.io/realtime/v1/rest/%s?' % data_type
         if operator:
             url += 'datasetId=%s&' % operator
-        if line_ref:
-            url += 'LineRef=%s&' % line_ref
+        # if line_ref:
+        #     url += 'LineRef=%s&' % line_ref
         if not force_get:
             return self.cached_get(url, json=False)
         else:
