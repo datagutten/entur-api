@@ -15,7 +15,9 @@ class Activity:
                              activity.tag)
 
     def __str__(self):
-        return '%s %s from %s at %s' % (self.line_name(), self.destination(), self.origin(), self.origin_time())
+        return '%s %s from %s at %s' % (
+        self.line_name(), self.destination(), self.origin(),
+        self.origin_time())
 
     def find(self, query, text=True, topic=None):
         if not topic:
