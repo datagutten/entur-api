@@ -22,9 +22,6 @@ jobs:
       - name: Install tools
         run: python -m pip install coverage requests
 
-      - name: Wait for grocy to be available
-        run: python3 tests/http_wait.py
-
       - name: Run tests
         run: coverage run -m unittest
 
